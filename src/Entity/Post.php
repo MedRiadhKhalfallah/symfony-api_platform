@@ -6,13 +6,18 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ApiResource(
  *     normalizationContext={"groups"={"read:Post:collection"}},
  *     denormalizationContext={"groups"={"write:Post"}},
- *     collectionOperations={"post","get"},
+ *     collectionOperations={
+ *     "post"={
+ *     "validation_groups"={"create:Post:collection"}
+ *     },
+ *     "get"},
  *     itemOperations={
  *     "put",
  *     "delete",
@@ -39,6 +44,11 @@ class Post
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"read:Post:collection","write:Post"})
+     * @Assert\Length(
+     *     min = 2,
+     *     max = 50,
+     *     groups = {"create:Post:collection"}
+     * )
      */
     private $title;
 
