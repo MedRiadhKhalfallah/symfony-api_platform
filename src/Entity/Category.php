@@ -11,7 +11,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *      *     itemOperations={
+ *     "put"={
+ *     "denormalization_context"={
+ *                              "groups"={
+ *                                  "write:Category"
+ *                                          }
+ *                              }
+ *          },
+ *     "get"
+ *     }
+ * )
  */
 class Category
 {
@@ -25,12 +36,13 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Post"})
+     * @Groups({"read:Post","write:Category"})
      */
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="category")
+     * @Groups({"write:Category"})
      */
     private $posts;
 

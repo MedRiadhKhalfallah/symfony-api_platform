@@ -11,7 +11,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ApiResource(
  *     normalizationContext={"groups"={"read:Post:collection"}},
+ *     denormalizationContext={"groups"={"write:Post"}},
+ *     collectionOperations={"post","get"},
  *     itemOperations={
+ *     "put",
+ *     "delete",
  *     "get"={
  *     "normalization_context"={
  *                              "groups"={
@@ -34,19 +38,19 @@ class Post
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Post:collection"})
+     * @Groups({"read:Post:collection","write:Post"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read:Post:collection"})
+     * @Groups({"read:Post:collection","write:Post"})
      */
     private $slug;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"read:Post:item"})
+     * @Groups({"read:Post:item","write:Post"})
      */
     private $content;
 
@@ -64,9 +68,15 @@ class Post
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts")
-     * @Groups({"read:Post:item"})
+     * @Groups({"read:Post:item","write:Post"})
      */
     private $category;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
