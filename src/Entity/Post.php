@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"={"write:Post"}},
  *     collectionOperations={
  *     "post"={
- *     "validation_groups"={"create:Post:collection"}
+ *     "validation_groups"={Post::class,"validationGroups"}
  *     },
  *     "get"},
  *     itemOperations={
@@ -77,7 +77,7 @@ class Post
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts", cascade="persist")
      * @Groups({"read:Post:item","write:Post"})
      */
     private $category;
@@ -88,6 +88,10 @@ class Post
         $this->updatedAt = new \DateTimeImmutable();
     }
 
+    public static function validationGroups(self $post){
+       // logique a appliquer de validation
+        return ["create:Post:collection"];
+    }
     public function getId(): ?int
     {
         return $this->id;
