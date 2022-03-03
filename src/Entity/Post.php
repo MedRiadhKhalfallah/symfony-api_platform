@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -29,6 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          }
  *     }
  * )
+ * @ApiFilter(SearchFilter::class, properties={"id": "exact", "title": "partial", "slug": "exact"})
  */
 class Post
 {
