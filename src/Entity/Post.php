@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ApiResource(
+ *     attributes={"pagination_items_per_page"=10,"maximum_items_per_page"=50,"pagination_client_items_per_page"=true},
  *     normalizationContext={"groups"={"read:Post:collection"}},
  *     denormalizationContext={"groups"={"write:Post"}},
  *     collectionOperations={
