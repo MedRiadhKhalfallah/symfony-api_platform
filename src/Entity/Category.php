@@ -7,10 +7,23 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *      *     itemOperations={
+ *     "put"={
+ *     "denormalization_context"={
+ *                              "groups"={
+ *                                  "write:Category"
+ *                                          }
+ *                              }
+ *          },
+ *     "get"
+ *     }
+ * )
  */
 class Category
 {
@@ -18,16 +31,20 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read:Post"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min = 2)
+     * @Groups({"read:Post","write:Category","write:Post"})
      */
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="category")
+     * @Groups({"write:Category"})
      */
     private $posts;
 
