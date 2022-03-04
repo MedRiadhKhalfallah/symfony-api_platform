@@ -84,6 +84,11 @@ class Post
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="boolean",options={"default":"0"})
+     */
+    private $online = false;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -163,6 +168,18 @@ class Post
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getOnline(): ?bool
+    {
+        return $this->online;
+    }
+
+    public function setOnline(bool $online): self
+    {
+        $this->online = $online;
 
         return $this;
     }
