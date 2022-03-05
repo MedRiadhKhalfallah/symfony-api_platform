@@ -5,11 +5,11 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\PostPublicationController;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ApiResource(
@@ -28,7 +28,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                                  "read:Post:collection","read:Post:item","read:Post"
  *                                          }
  *                              }
- *          }
+ *          },
+ *     "post_publication"={
+ *         "method"="POST",
+ *         "path"="/posts/{id}/publication",
+ *         "controller"=PostPublicationController::class,
+ *          "openapi_context"={
+ *                              "summary"="Permet de publier un article",
+ *                              "requestBody"={
+ *                                              "content"={"application/json"={"schema"={"type"="object"}}}
+ *                                              }
+ *                              }
+ *     }
  *     }
  * )
  * @ApiFilter(SearchFilter::class, properties={"id": "exact", "title": "partial", "slug": "exact"})
@@ -86,6 +97,7 @@ class Post
 
     /**
      * @ORM\Column(type="boolean",options={"default":"0"})
+     * @Groups({"read:Post:collection","read:Post:item"})
      */
     private $online = false;
 
