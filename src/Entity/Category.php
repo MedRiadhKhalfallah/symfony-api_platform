@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Action\NotFoundAction;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  * @ApiResource(
- *      *     itemOperations={
+ * itemOperations={
  *     "put"={
  *     "denormalization_context"={
  *                              "groups"={
@@ -21,8 +22,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                                          }
  *                              }
  *          },
- *     "get"
- *     }
+ *     "get"={
+ *      "openapi_context"={
+ *                "summary"="hidden"
+ *                },
+ *       "controller"=NotFoundAction::class,
+ *       "read"=false,
+ *       "output"=false
+ *      },
+ *     "patch",
+ *     "delete",
+ *     },
+ *     collectionOperations={
+ *     "post",
+ *     "get"}
  * )
  */
 class Category
