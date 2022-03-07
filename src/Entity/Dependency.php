@@ -10,10 +10,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ORM\Entity(repositoryClass=DependencyRepository::class)
  * @ApiResource(
  * itemOperations={
- *     "get"
+ *     "get",
+ *     "put",
+ *     "delete"
  *     },
  *     collectionOperations={
- *     "get"}
+ *     "get",
+ *     "post"}
  *)
  */
 class Dependency

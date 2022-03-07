@@ -14,9 +14,15 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DependencyRepository extends ServiceEntityRepository
 {
+    /**
+     * @var ManagerRegistry
+     */
+    private $registry;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Dependency::class);
+        $this->registry = $registry;
     }
 
     // /**
@@ -47,4 +53,17 @@ class DependencyRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function save($dependency){
+        $entityManager=$this->registry->getManager();
+        $entityManager->persist($dependency);
+        $entityManager->flush();
+        return $dependency;
+    }
+    public function delete($dependency){
+        $entityManager=$this->registry->getManager();
+        $entityManager->remove($dependency);
+        $entityManager->flush();
+        return true;
+    }
 }
