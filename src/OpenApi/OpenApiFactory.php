@@ -10,6 +10,7 @@ namespace App\OpenApi;
 
 
 use ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface;
+use ApiPlatform\Core\OpenApi\Model\Operation;
 use ApiPlatform\Core\OpenApi\Model\PathItem;
 use ApiPlatform\Core\OpenApi\OpenApi;
 
@@ -38,6 +39,16 @@ class OpenApiFactory implements OpenApiFactoryInterface
                 $openApi->getPaths()->addPath($key, $path->withGet(null));
             }
         }
+//        creation une entrée pour le login
+        $schemas = $openApi->getComponents()->getSecuritySchemes();
+        $schemas['cookieAuth'] = new \ArrayObject([
+            'type' => 'apikey',
+            'in' => 'cookie',
+            'name' => 'PHPSESSID'
+        ]);
+//        ajouter controlle connexion sur tous les entrees
+//        $openApi=$openApi->withSecurity(['cookieAuth'=>[]]);
+
         return $openApi;
     }
 }

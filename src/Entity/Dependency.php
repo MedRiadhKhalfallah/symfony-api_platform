@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 /**
  * @ORM\Entity(repositoryClass=DependencyRepository::class)
  * @ApiResource(
+ * security= "is_granted('ROLE_USER')",
  * itemOperations={
  *     "get",
  *     "put",
