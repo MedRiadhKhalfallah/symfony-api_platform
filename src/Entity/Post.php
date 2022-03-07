@@ -5,11 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\PostPublicationController;
+use App\Controller\PostCountController;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  * @ApiResource(
@@ -18,7 +19,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"={"write:Post"}},
  *     collectionOperations={
  *     "post",
- *     "get"},
+ *     "get",
+ *     "get_count"={
+ *         "method"="GET",
+ *         "path"="/posts/count",
+ *         "controller"=PostCountController::class,
+ *     "filters"={},
+ *     "pagination_enabled"=False,
+ *          "openapi_context"={
+ *                              "summary"="Permet de retourner nombre total des posts",
+ *                              "parameters"={{"in"="query","name"="online","schema"={"type"="integer","maximum"=1,"minimum"=0},"description"="Filtre les articles en ligne"}},
+ *                              "responses"={"200"={"description"="OK","content"={
+ *                                     "application/json"={"schema"={"type"="integer","example"=3}}
+ *                              }}}
+ *     }}
+ *       },
  *     itemOperations={
  *     "put",
  *     "delete",
@@ -28,11 +43,23 @@ use Symfony\Component\Validator\Constraints as Assert;
  *                                  "read:Post:collection","read:Post:item","read:Post"
  *                                          }
  *                              }
- *          }
+ *          },
+ *     "post_publication"={
+ *         "method"="POST",
+ *         "path"="/posts/{id}/publication",
+ *         "controller"=PostPublicationController::class,
+ *          "openapi_context"={
+ *                              "summary"="Permet de publier un article",
+ *                              "requestBody"={
+ *                                              "content"={"application/json"={"schema"={"type"="object"}}}
+ *                                              }
+ *                              }
+ *     }
  *     }
  * )
  * @ApiFilter(SearchFilter::class, properties={"id": "exact", "title": "partial", "slug": "exact"})
  */
+
 class Post
 {
     /**
@@ -86,6 +113,7 @@ class Post
 
     /**
      * @ORM\Column(type="boolean",options={"default":"0"})
+     * @Groups({"read:Post:collection","read:Post:item"})
      */
     private $online = false;
 
