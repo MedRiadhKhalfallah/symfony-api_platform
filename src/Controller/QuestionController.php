@@ -8,10 +8,11 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class QuestionController
+class QuestionController extends AbstractController
 {
 
     public function __construct()
@@ -33,8 +34,16 @@ class QuestionController
      */
     public function show(string $slug)
     {
-        $slugEspace=str_replace('-', ' ', $slug);
+        $answers =[
+            'riadh1',
+            'riadh2',
+            'riadh3',
+        ];
+        $slugEspace=ucwords(str_replace('-', ' ', $slug));
 //        var_dump($slugEspace);die;
-        return new Response('Hello ' . ucwords($slugEspace));
+        return $this->render('question/show.html.twig',[
+            'questions'=>$slugEspace,
+            'answers'=>$answers,
+        ]);
     }
 }
